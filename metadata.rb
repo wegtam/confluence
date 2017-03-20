@@ -25,6 +25,7 @@ supports 'ubuntu'
 
 depends 'apache2'
 depends 'ark'
+depends 'chef_nginx'
 depends 'database'
 depends 'java'
 depends 'mysql', '< 8.0'
