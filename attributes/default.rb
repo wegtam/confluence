@@ -82,13 +82,16 @@ default['confluence']['crowd_sso']['crowd_base_url'] = 'http://crowd.example.com
 
 default['confluence']['nginx']['hostname'] = 'localhost'
 default['confluence']['nginx']['port'] = 80
+
 case node['platform_family']
 when 'freebsd'
   default['confluence']['nginx']['root'] = '/usr/local/www/nginx/'
 else
   default['confluence']['nginx']['root'] = '/var/www'
 end
+
 default['confluence']['nginx']['ssl'] = false
+
 case node['platform_family']
 when 'rhel'
   default['confluence']['nginx']['ssl_crt'] = '/etc/pki/tls/certs/localhost.crt'
