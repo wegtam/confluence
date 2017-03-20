@@ -79,3 +79,22 @@ default['confluence']['crowd_sso']['enabled'] = false
 default['confluence']['crowd_sso']['app_name'] = nil
 default['confluence']['crowd_sso']['app_password'] = nil
 default['confluence']['crowd_sso']['crowd_base_url'] = 'http://crowd.example.com:8095/crowd'
+
+default['confluence']['nginx']['hostname'] = 'localhost'
+default['confluence']['nginx']['port'] = 80
+case node['platform_family']
+  when 'freebsd'
+    default['confluence']['nginx']['root'] = '/usr/local/www/nginx/'
+  else
+    default['confluence']['nginx']['root'] = '/var/www'
+end
+default['confluence']['nginx']['ssl'] = false
+case node['platform_family']
+  when 'rhel'
+    default['confluence']['nginx']['ssl_crt'] = '/etc/pki/tls/certs/localhost.crt'
+    default['confluence']['nginx']['ssl_key'] = '/etc/pki/tls/private/localhost.key'
+  else
+    default['confluence']['nginx']['ssl_crt'] = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
+    default['confluence']['nginx']['ssl_key'] = '/etc/ssl/ssl-cert-snakeoil.key'
+end
+

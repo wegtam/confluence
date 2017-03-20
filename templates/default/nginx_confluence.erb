@@ -1,0 +1,34 @@
+# Configuration for nginx reverse proxy for confluence.
+server {
+    <% if confluence_proxy_ssl -%>
+    listen       <%= node['confluence']['nginx']['port'] %> ssl;
+    <% else %>  
+    listen       <%= node['confluence']['nginx']['port'] %>;
+    <% end %>
+    server_name  <%= node['confluence']['nginx']['hostname'] %>;
+
+    <% if confluence_proxy_ssl -%>
+    ssl_certificate      <%= node['confluence']['nginx']['ssl_crt'] %>;
+    ssl_certificate_key  <%= node['confluence']['nginx']['ssl_key'] %>;
+    <% end %>
+
+    root <%= node['confluence']['nginx']['root'] %>;
+
+    location / {
+      proxy_pass http://localhost:8090;
+      proxy_redirect default;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection $connection_upgrade;
+    }
+    location /synchrony {
+      proxy_set_header X-Forwarded-Host $host;
+      proxy_set_header X-Forwarded-Server $host;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_pass http://localhost:8091/synchrony;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection $connection_upgrade;
+    }
+}
+
